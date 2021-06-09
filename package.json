@@ -1,0 +1,12 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "googleapis": "39"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
+  }
+}
