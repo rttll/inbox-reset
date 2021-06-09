@@ -20,17 +20,28 @@ function authenticate() {
   });
 }
 
+let results = [];
+let url = '/messages';
 function messages() {
   let params = new URLSearchParams(window.location.search);
   let code = params.get('code');
   if (code) {
     window.location.replace('/');
   }
-  request('/messages').then((json) => {
+  request(url).then((json) => {
     if (!json.data) return authenticate();
-    request('/message?id=' + json.data.messages[0].id).then((json) => {
+
+    // request('/message?id=' + json.data.messages[0].id).then((json) => {
+    //   debugger;
+    // });
+
+    results = results.concat(json.data.messages);
+    if (json.data.nextPageToken) {
+      url = '/messages?pageToken=' + json.data.nextPageToken;
+      messages();
+    } else {
       debugger;
-    });
+    }
   });
 }
 

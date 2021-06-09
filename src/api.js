@@ -68,15 +68,21 @@ function authenticate() {
   // opn(authorizeUrl, { wait: false }).then((cp) => cp.unref());
 }
 
-async function messages() {
+async function messages(query) {
+  let pageToken = _getParam(query, 'pageToken');
   const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
   try {
-    let messages = await gmail.users.messages.list({
+    let args = {
       userId: 'me',
       labelIds: ['INBOX'],
-      q: 'is:unread',
+      q: 'is:read',
+      maxResults: 1000,
       includeSpamTrash: false,
-    });
+    };
+    if (pageToken) {
+      args.pageToken = pageToken;
+    }
+    let messages = await gmail.users.messages.list(args);
     return messages;
   } catch (err) {
     return err;
@@ -90,6 +96,7 @@ async function message(query) {
     let messages = await gmail.users.messages.get({
       userId: 'me',
       id: id,
+      format: 'full',
     });
     return messages;
   } catch (err) {

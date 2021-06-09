@@ -1,92 +1,44 @@
 const http = require('http');
-const fs = require('fs');
 const url = require('url');
-const auth = require('./src/auth');
+const api = require('./src/api');
+const { getFile, render } = require('./src/util');
 
 require('dotenv').config();
-
-const authCB = '/' + process.env.REDIRECT_URI;
 
 const routes = {
   '/': 'index',
   '/messages': 'messages',
-  '/message': 'message',
   '/404': 'not_found',
-  [authCB]: authCB,
   '/authenticate': 'authenticate', // post
-};
-
-const get = (file) => {
-  return fs.readFileSync(file, function (err, html) {
-    if (err) {
-      return false;
-    }
-    return html;
-  });
-};
-
-const render = (res, data) => {
-  const key = Object.keys(data)[0];
-  let content = data[key],
-    type;
-  switch (key) {
-    case 'json':
-      type = 'application/json';
-      break;
-    case 'js':
-      type = 'application/javascript';
-      if (!content) {
-        res.writeHead(400);
-        res.end();
-        return;
-      }
-      break;
-    default:
-      // html
-      type = 'text/html';
-      if (!content) {
-        content = get('./public/404.html');
-      }
-      break;
-  }
-  res.writeHeader(200, { 'Content-Type': type });
-  res.write(content);
-  res.end();
 };
 
 const controller = {
   assets: (res, pathname) => {
-    let asset = get(`./public/assets${pathname}`);
+    let asset = getFile(`./public/assets${pathname}`);
     let type = pathname.split('.').pop();
     render(res, { [type]: asset });
   },
   index: async (res, query) => {
     if (/code/.test(query)) {
-      await auth.setTokens(query);
+      await api.setTokens(query);
     }
     let file = './public/index.html';
-    let html = get(file);
-
+    let html = getFile(file);
     render(res, { html: html });
   },
   not_found: (res) => {
     let file = './public/404.html';
-    let html = get(file);
+    let html = getFile(file);
     render(res, { html });
   },
   authenticate: (res) => {
-    let url = auth.authenticate();
+    let url = api.authenticate();
     let json = JSON.stringify(url);
     render(res, { json });
   },
-  messages: async (res) => {
-    let messages = await auth.messages();
+  messages: async (res, query) => {
+    let messages = await api.messages(query);
     let json = JSON.stringify(messages);
-    render(res, { json });
-  },
-  message: async (res, query) => {
-    let message = await auth.message(query);
-    let json = JSON.stringify(message);
     render(res, { json });
   },
 };
