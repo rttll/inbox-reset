@@ -10,6 +10,7 @@ const authCB = '/' + process.env.REDIRECT_URI;
 const routes = {
   '/': 'index',
   '/messages': 'messages',
+  '/message': 'message',
   '/404': 'not_found',
   [authCB]: authCB,
   '/authenticate': 'authenticate', // post
@@ -81,6 +82,11 @@ const controller = {
   messages: async (res) => {
     let messages = await auth.messages();
     let json = JSON.stringify(messages);
+    render(res, { json });
+  },
+  message: async (res, query) => {
+    let message = await auth.message(query);
+    let json = JSON.stringify(message);
     render(res, { json });
   },
 };

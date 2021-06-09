@@ -34,6 +34,11 @@ const host = (process.env.NODE_ENV = 'development'
 
 let oauth2Client;
 
+function _getParam(str, key) {
+  const qs = new url.URL(`/?${str}`, 'http://localhost:8080').searchParams;
+  return qs.get(key);
+}
+
 function _setAuthClient() {
   if (oauth2Client) return;
 
@@ -45,10 +50,9 @@ function _setAuthClient() {
   // google.options({ auth: oauth2Client });
 }
 
-async function setTokens(urlStr) {
+async function setTokens(str) {
   _setAuthClient();
-  const qs = new url.URL(`/?${urlStr}`, 'http://localhost:8080').searchParams;
-  const code = qs.get('code');
+  const code = _getParam(str, 'code');
   const { tokens } = await oauth2Client.getToken(code);
   return oauth2Client.setCredentials(tokens); // eslint-disable-line require-atomic-updates
 }
@@ -69,6 +73,9 @@ async function messages() {
   try {
     let messages = await gmail.users.messages.list({
       userId: 'me',
+      labelIds: ['INBOX'],
+      q: 'is:unread',
+      includeSpamTrash: false,
     });
     return messages;
   } catch (err) {
@@ -76,18 +83,19 @@ async function messages() {
   }
 }
 
-async function listLabels() {
+async function message(query) {
+  let id = _getParam(query, 'id');
   const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
   try {
-    let labels = await gmail.users.messages.list({
+    let messages = await gmail.users.messages.get({
       userId: 'me',
-      labelIds: ['INBOX'],
-      q: 'is:unread',
+      id: id,
     });
-    return labels;
+    return messages;
   } catch (err) {
+    debugger;
     return err;
   }
 }
 
-module.exports = { authenticate, setTokens, listLabels, messages };
+module.exports = { authenticate, setTokens, messages, message };

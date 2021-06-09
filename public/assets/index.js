@@ -27,8 +27,10 @@ function messages() {
     window.location.replace('/');
   }
   request('/messages').then((json) => {
-    if (!json.data.messages) return authenticate();
-    debugger;
+    if (!json.data) return authenticate();
+    request('/message?id=' + json.data.messages[0].id).then((json) => {
+      debugger;
+    });
   });
 }
 
