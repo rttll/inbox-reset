@@ -20,6 +20,11 @@ const { google } = require('googleapis');
 
 require('dotenv').config();
 
+const scopes = [
+  'https://www.googleapis.com/auth/gmail.addons.current.message.action',
+  'https://www.googleapis.com/auth/gmail.modify',
+];
+
 const keys = {
   client_id: process.env.CLIENT_ID,
   client_secret: process.env.CLIENT_SECRET,
@@ -40,15 +45,15 @@ function _setAuthClient() {
     keys.client_secret,
     `${host}/${keys.redirect_uri}`
   );
-  google.options({ auth: oauth2Client });
+  // google.options({ auth: oauth2Client });
 }
 
 async function setTokens(urlStr) {
   _setAuthClient();
   const qs = new url.URL(`/?${urlStr}`, 'http://localhost:8080').searchParams;
-  const { tokens } = await oauth2Client.getToken(qs.get('code'));
-
-  oauth2Client.credentials = tokens; // eslint-disable-line require-atomic-updates
+  const code = qs.get('code');
+  const { tokens } = await oauth2Client.getToken(code);
+  oauth2Client.setCredentials(tokens); // eslint-disable-line require-atomic-updates
 }
 
 function authenticate() {
@@ -57,29 +62,21 @@ function authenticate() {
     // access_type: 'offline',
     scope: scopes.join(' '),
   });
+
   return { url };
   // opn(authorizeUrl, { wait: false }).then((cp) => cp.unref());
 }
 
-const scopes = [
-  'https://www.googleapis.com/auth/contacts.readonly',
-  'https://www.googleapis.com/auth/user.emails.read',
-  'profile',
-];
+async function listLabels() {
+  const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+  try {
+    let labels = await gmail.users.labels.list({
+      userId: 'me',
+    });
+    return labels;
+  } catch (err) {
+    return err;
+  }
+}
 
-module.exports = { authenticate, setTokens };
-
-
-
-// async function runSample() {
-//   // retrieve user profile
-//   const res = await people.people.get({
-//     resourceName: 'people/me',
-//     personFields: 'emailAddresses',
-//   });
-//   console.log(res.data);
-// }
-
-// authenticate(scopes)
-//   .then((client) => runSample(client))
-//   .catch(console.error);
+module.exports = { authenticate, setTokens, listLabels };

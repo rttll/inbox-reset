@@ -13,6 +13,7 @@ const routes = {
   '/404': 'not_found',
   [authCB]: authCB,
   '/authenticate': 'authenticate', // post
+  '/labels': 'labels', // post
 };
 
 const get = (file) => {
@@ -74,13 +75,17 @@ const controller = {
     let json = JSON.stringify(url);
     render(res, { json });
   },
-  [authCB]: (res, query) => {
+  [authCB]: async (res, query) => {
     // /authenticated
-    auth.setTokens(query);
-    // controller.index(res);
+    await auth.setTokens(query);
     let file = './public/archiver.html';
     let html = get(file);
     render(res, { html });
+  },
+  labels: async (res) => {
+    let labels = await auth.listLabels();
+    let json = JSON.stringify(labels);
+    render(res, { json });
   },
 };
 
