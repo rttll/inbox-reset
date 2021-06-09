@@ -20,10 +20,7 @@ const { google } = require('googleapis');
 
 require('dotenv').config();
 
-const scopes = [
-  'https://www.googleapis.com/auth/gmail.addons.current.message.action',
-  'https://www.googleapis.com/auth/gmail.modify',
-];
+const scopes = ['https://www.googleapis.com/auth/gmail.modify'];
 
 const keys = {
   client_id: process.env.CLIENT_ID,
@@ -43,7 +40,7 @@ function _setAuthClient() {
   oauth2Client = new google.auth.OAuth2(
     keys.client_id,
     keys.client_secret,
-    `${host}/${keys.redirect_uri}`
+    `${host}`
   );
   // google.options({ auth: oauth2Client });
 }
@@ -53,7 +50,7 @@ async function setTokens(urlStr) {
   const qs = new url.URL(`/?${urlStr}`, 'http://localhost:8080').searchParams;
   const code = qs.get('code');
   const { tokens } = await oauth2Client.getToken(code);
-  oauth2Client.setCredentials(tokens); // eslint-disable-line require-atomic-updates
+  return oauth2Client.setCredentials(tokens); // eslint-disable-line require-atomic-updates
 }
 
 function authenticate() {
@@ -67,11 +64,25 @@ function authenticate() {
   // opn(authorizeUrl, { wait: false }).then((cp) => cp.unref());
 }
 
+async function messages() {
+  const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+  try {
+    let messages = await gmail.users.messages.list({
+      userId: 'me',
+    });
+    return messages;
+  } catch (err) {
+    return err;
+  }
+}
+
 async function listLabels() {
   const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
   try {
-    let labels = await gmail.users.labels.list({
+    let labels = await gmail.users.messages.list({
       userId: 'me',
+      labelIds: ['INBOX'],
+      q: 'is:unread',
     });
     return labels;
   } catch (err) {
@@ -79,4 +90,4 @@ async function listLabels() {
   }
 }
 
-module.exports = { authenticate, setTokens, listLabels };
+module.exports = { authenticate, setTokens, listLabels, messages };

@@ -9,11 +9,10 @@ const authCB = '/' + process.env.REDIRECT_URI;
 
 const routes = {
   '/': 'index',
-  '/archiver': 'archiver',
+  '/messages': 'messages',
   '/404': 'not_found',
   [authCB]: authCB,
   '/authenticate': 'authenticate', // post
-  '/labels': 'labels', // post
 };
 
 const get = (file) => {
@@ -60,9 +59,13 @@ const controller = {
     let type = pathname.split('.').pop();
     render(res, { [type]: asset });
   },
-  index: (res, query) => {
+  index: async (res, query) => {
+    if (/code/.test(query)) {
+      await auth.setTokens(query);
+    }
     let file = './public/index.html';
     let html = get(file);
+
     render(res, { html: html });
   },
   not_found: (res) => {
@@ -75,16 +78,9 @@ const controller = {
     let json = JSON.stringify(url);
     render(res, { json });
   },
-  [authCB]: async (res, query) => {
-    // /authenticated
-    await auth.setTokens(query);
-    let file = './public/archiver.html';
-    let html = get(file);
-    render(res, { html });
-  },
-  labels: async (res) => {
-    let labels = await auth.listLabels();
-    let json = JSON.stringify(labels);
+  messages: async (res) => {
+    let messages = await auth.messages();
+    let json = JSON.stringify(messages);
     render(res, { json });
   },
 };
@@ -96,7 +92,6 @@ const handler = function (req, res) {
   if (assets) {
     return controller.assets(res, pathname);
   }
-
   let fn = controller[routes[pathname]];
   fn(res, query);
 };
