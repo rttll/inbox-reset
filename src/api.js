@@ -19,7 +19,7 @@ const { google } = require('googleapis');
 
 // https://github.com/googleapis/google-api-nodejs-client/blob/master/samples/oauth2.js
 
-require('dotenv').config();
+// require('dotenv').config();
 
 const scopes = ['https://www.googleapis.com/auth/gmail.modify'];
 

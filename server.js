@@ -5,7 +5,7 @@ const url = require('url');
 const api = require('./src/api');
 const { getFile, render } = require('./src/util');
 
-require('dotenv').config();
+// require('dotenv').config();
 
 const routes = {
   '/': 'index',

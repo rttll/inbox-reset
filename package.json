@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "dev": "heroku local",
     "serve": "node server.js",
     "sass": "sass --watch src/assets/scss:public/assets/css"
   },
@@ -13,5 +14,8 @@
   "devDependencies": {
     "dotenv": "^10.0.0",
     "mime-types": "^2.1.31"
+  },
+  "engines": {
+    "node": "12.22.x"
   }
 }
