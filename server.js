@@ -18,7 +18,8 @@ const routes = {
 const controller = {
   assets: (res, pathname) => {
     let type = pathname.split('.').slice(-1)[0];
-    let asset = getFile(`./public/${pathname}`);
+    let path = `./public/${pathname}`.replace(/\/\//, '/');s
+    let asset = getFile(path);
     render(res, { [type]: asset });
   },
   index: async (res, query) => {
