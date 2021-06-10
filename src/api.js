@@ -29,10 +29,10 @@ const keys = {
   client_secret: process.env.CLIENT_SECRET,
   redirect_uri: process.env.REDIRECT_URI,
 };
-
+const port = process.env.PORT || 8080;
 const host = PRODUCTION
   ? 'https://gmailreset.herokuapp.com'
-  : 'http://localhost:8080';
+  : `http://localhost:${port}`;
 
 let oauth2Client;
 
