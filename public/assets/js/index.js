@@ -1,10 +1,16 @@
-function request(url) {
-  return fetch(url, {
+'use strict';
+
+function request(url, data) {
+  let options = {
     headers: {
       'Content-Type': 'application/json',
     },
     method: 'POST',
-  })
+  };
+  if (data) {
+    options.body = JSON.stringify(data);
+  }
+  return fetch(url, options)
     .then((resp) => resp.json())
     .then((json) => {
       return json;
@@ -20,25 +26,15 @@ function authenticate() {
   });
 }
 
-let results = [];
-let url = '/messages';
-function batch(resolve) {
-  request(url).then((json) => {
-    if (!json.data) return authenticate();
-
-    results = results.concat(json.data.messages);
-    if (json.data.nextPageToken) {
-      url = '/messages?pageToken=' + json.data.nextPageToken;
-      batch(resolve);
-    } else {
-      resolve(results);
-    }
+function messages() {
+  return request('/messages').then((json) => {
+    return json;
   });
 }
 
-function messages() {
-  return new Promise(function (resolve, reject) {
-    batch(resolve);
+function archive() {
+  return request('/archive').then((resp) => {
+    return resp;
   });
 }
 
@@ -49,7 +45,7 @@ function app() {
     showIntro: !loading,
     showFetch: false,
     showResults: false,
-    results: [],
+    count: -1,
     done: false,
     init() {
       if (this.loading) {
@@ -70,19 +66,18 @@ function app() {
     fetch() {
       this.loading = true;
       window.localStorage.setItem('gmail-reset-loading', 'anythingfooooo');
-      messages().then((results) => {
+      messages().then(({ count }) => {
         window.localStorage.removeItem('gmail-reset-loading');
-        this.results = results;
+        this.count = count;
         this.showFetch = false;
         this.loading = false;
         this.showResults = true;
       });
     },
-    close() {
-      this.show = false;
-    },
-    isOpen() {
-      return this.show === true;
+    archive() {
+      archive().then((resp) => {
+        debugger;
+      });
     },
   };
 }

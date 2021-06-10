@@ -1,3 +1,5 @@
+'use strict';
+
 const http = require('http');
 const url = require('url');
 const api = require('./src/api');
@@ -11,6 +13,7 @@ const routes = {
   '/messages': 'messages',
   '/404': 'not_found',
   '/authenticate': 'authenticate', // post
+  '/archive': 'archive', // post
 };
 
 const controller = {
@@ -42,6 +45,11 @@ const controller = {
     let json = JSON.stringify(messages);
     render(res, { json });
   },
+  archive: async (res) => {
+    let archive = await api.archive();
+    let json = JSON.stringify(archive);
+    render(res, { json });
+  },
 };
 
 const handler = function (req, res) {
@@ -53,9 +61,10 @@ const handler = function (req, res) {
   }
   let fn = controller[routes[pathname]];
   if (typeof fn !== 'function') {
-    console.log(' no method', pathname);
+    console.log('no method', pathname);
     return;
   }
+
   fn(res, query);
 };
 

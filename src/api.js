@@ -13,6 +13,7 @@
 
 'use strict';
 
+const fs = require('fs');
 const url = require('url');
 const { google } = require('googleapis');
 
@@ -47,7 +48,6 @@ function _setAuthClient() {
     keys.client_secret,
     `${host}`
   );
-  // google.options({ auth: oauth2Client });
 }
 
 async function setTokens(str) {
@@ -65,44 +65,71 @@ function authenticate() {
   });
 
   return { url };
-  // opn(authorizeUrl, { wait: false }).then((cp) => cp.unref());
 }
 
-async function messages(query) {
-  let pageToken = _getParam(query, 'pageToken');
+let results = [],
+  pageToken = null;
+
+async function _batch(resolve) {
   const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
   try {
     let args = {
       userId: 'me',
       labelIds: ['INBOX'],
-      q: 'is:read',
-      maxResults: 1000,
+      // q: 'is:unread',
+      maxResults: 5000,
       includeSpamTrash: false,
     };
     if (pageToken) {
       args.pageToken = pageToken;
     }
-    let messages = await gmail.users.messages.list(args);
-    return messages;
+    let resp = await gmail.users.messages.list(args);
+    if (!resp.data) resolve(false);
+    results = results.concat(resp.data.messages);
+    if (resp.data.nextPageToken) {
+      pageToken = resp.data.nextPageToken;
+      _batch(resolve);
+    } else {
+      pageToken = null;
+      resolve(results);
+    }
   } catch (err) {
     return err;
   }
 }
 
-async function message(query) {
-  let id = _getParam(query, 'id');
+function _getMessages() {
+  results = [];
+  return new Promise(function (resolve, reject) {
+    _batch(resolve);
+  });
+}
+
+async function messages() {
+  let data = await _getMessages();
+  fs.writeFile('backup.json', JSON.stringify(data), () => {
+    console.log('wrote backup.json');
+  });
+  return { count: results.length };
+}
+
+async function archive() {
+  let ids = results.map((obj) => obj.id);
+
   const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
   try {
-    let messages = await gmail.users.messages.get({
+    let args = {
       userId: 'me',
-      id: id,
-      format: 'full',
-    });
-    return messages;
+      requestBody: {
+        ids: ids,
+        removeLabelIds: ['INBOX'],
+      },
+    };
+    return await gmail.users.messages.batchModify(args);
   } catch (err) {
     debugger;
     return err;
   }
 }
 
-module.exports = { authenticate, setTokens, messages, message };
+module.exports = { authenticate, setTokens, messages, archive };

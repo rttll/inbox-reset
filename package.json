@@ -8,7 +8,7 @@
     "sass": "sass --watch src/assets/scss:public/assets/css"
   },
   "dependencies": {
-    "googleapis": "39"
+    "googleapis": "^76.0.0"
   },
   "devDependencies": {
     "dotenv": "^10.0.0",

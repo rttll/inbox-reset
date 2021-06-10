@@ -9,3 +9,7 @@ keys
 
 # log files
 .sass-cache/
+.vscode/
+
+# temp
+backup.json

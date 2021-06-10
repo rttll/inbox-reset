@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const getFile = (file) => {
   return fs.readFileSync(file, function (err, html) {

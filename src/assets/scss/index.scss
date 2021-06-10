@@ -1,6 +1,6 @@
 body,
 html {
-  background: midnightblue;
+  background: #220140;
   padding: 0;
   margin: 0;
   font-family: sans-serif;
@@ -12,6 +12,8 @@ html {
 
 main {
   height: 100vh;
+  padding: 3rem;
+  padding-left: 10rem;
 }
 
 @mixin fontBig {
@@ -22,12 +24,13 @@ button {
   background: gold;
   padding: 1rem 2.3rem;
   border: 1px solid goldenrod;
-  box-shadow: 3px 3px 0px #222;
+  box-shadow: -6px 6px 0px #222;
   cursor: pointer;
   transition: all 0.1s ease;
   @include fontBig();
   &:hover {
-    box-shadow: 1px 1px 0px #222;
+    transform: translate3d(1px, -1px, 0);
+    box-shadow: -7px 7px 1px #222;
   }
 }
 
@@ -35,11 +38,11 @@ button {
   border-right: 1px solid #333;
 }
 
-.v-half {
-  width: 50%;
-  padding: 3rem;
+.flex-left {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-items: flex-start;
 }
 
 .flex-center {
@@ -49,8 +52,14 @@ button {
 }
 
 .box {
+  width: 100%;
+  min-width: 40%;
+  max-width: 600px;
   background: #fff;
   padding: 2.3rem;
   border: 1.3rem solid #efefef;
+  border-left-color: #e0dede;
+  // border-bottom-color: #e0dede;
+  border-bottom-color: #d6d4d4;
   @include fontBig();
 }
