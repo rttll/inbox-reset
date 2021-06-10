@@ -11,7 +11,6 @@ const routes = {
   '/': 'index',
   '/index.html': 'index',
   '/messages': 'messages',
-  '/404': 'not_found',
   '/authenticate': 'authenticate', // post
   '/archive': 'archive', // post
 };
@@ -29,11 +28,6 @@ const controller = {
     let file = './public/index.html';
     let html = getFile(file);
     render(res, { html: html });
-  },
-  not_found: (res) => {
-    let file = './public/404.html';
-    let html = getFile(file);
-    render(res, { html });
   },
   authenticate: (res) => {
     let url = api.authenticate();
@@ -62,7 +56,8 @@ const handler = function (req, res) {
   let fn = controller[routes[pathname]];
 
   if (typeof fn !== 'function') {
-    // console.log('no method', pathname);
+    let ext = pathname.split('.').slice(-1)[0];
+    render(res, { [ext]: null });
     return;
   }
   fn(res, query);

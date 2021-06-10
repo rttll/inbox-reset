@@ -18,13 +18,16 @@ const _types = {
 };
 
 const render = (res, data) => {
-  const key = Object.keys(data)[0];
-  const mimeType = _types[key];
-  let content = data[key];
+  let key = Object.keys(data)[0];
+
+  if (Object.keys(_types).indexOf(key) === -1) key = 'html';
+
+  let mimeType = _types[key],
+    content = data[key];
 
   if (!content) {
     if (key !== 'html') {
-      res.writeHead(400);
+      res.writeHead(404);
       res.end();
       return;
     }
