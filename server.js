@@ -19,7 +19,7 @@ const routes = {
 const controller = {
   assets: (res, pathname) => {
     let type = pathname.split('.').slice(-1)[0];
-    let asset = getFile(`./public/assets/${type}${pathname}`);
+    let asset = getFile(`./public/${pathname}`);
     render(res, { [type]: asset });
   },
   index: async (res, query) => {
@@ -60,11 +60,11 @@ const handler = function (req, res) {
     return controller.assets(res, pathname);
   }
   let fn = controller[routes[pathname]];
+
   if (typeof fn !== 'function') {
-    console.log('no method', pathname);
+    // console.log('no method', pathname);
     return;
   }
-
   fn(res, query);
 };
 

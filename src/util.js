@@ -10,39 +10,28 @@ const getFile = (file) => {
   });
 };
 
+const _types = {
+  json: 'application/json',
+  html: 'text/html',
+  js: 'application/javascript',
+  css: 'text/css',
+};
+
 const render = (res, data) => {
   const key = Object.keys(data)[0];
-  let content = data[key],
-    type;
-  switch (key) {
-    case 'json':
-      type = 'application/json';
-      break;
-    case 'js':
-      type = 'application/javascript';
-      if (!content) {
-        res.writeHead(400);
-        res.end();
-        return;
-      }
-      break;
-    case 'css':
-      type = 'text/css';
-      if (!content) {
-        res.writeHead(400);
-        res.end();
-        return;
-      }
-      break;
-    default:
-      // html
-      type = 'text/html';
-      if (!content) {
-        content = getFile('./public/404.html');
-      }
-      break;
+  const mimeType = _types[key];
+  let content = data[key];
+
+  if (!content) {
+    if (key !== 'html') {
+      res.writeHead(400);
+      res.end();
+      return;
+    }
+    content = getFile('./public/404.html');
   }
-  res.writeHeader(200, { 'Content-Type': type });
+
+  res.writeHeader(200, { 'Content-Type': mimeType });
   res.write(content);
   res.end();
 };
