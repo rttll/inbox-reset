@@ -84,7 +84,9 @@ async function _batch(resolve) {
       args.pageToken = pageToken;
     }
     let resp = await gmail.users.messages.list(args);
-    if (!resp.data) resolve(false);
+    if (!resp.data) return resolve(false);
+    if (resp.data.resultSizeEstimate === 0) return resolve(false);
+
     results = results.concat(resp.data.messages);
     if (resp.data.nextPageToken) {
       pageToken = resp.data.nextPageToken;
@@ -107,9 +109,11 @@ function _getMessages() {
 
 async function messages() {
   let data = await _getMessages();
-  fs.writeFile('backup.json', JSON.stringify(data), () => {
-    console.log('wrote backup.json');
-  });
+  if (data) {
+    fs.writeFile('backup.json', JSON.stringify(data), () => {
+      console.log('wrote backup.json');
+    });
+  }
   return { count: results.length };
 }
 

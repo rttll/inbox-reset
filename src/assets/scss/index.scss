@@ -1,13 +1,39 @@
+$purple: #220140;
+$color-offset: 0.8;
+
 body,
 html {
-  background: #220140;
+  background: repeating-linear-gradient(
+    -45deg,
+    #fff,
+    #fff 10px,
+    #efefef 10px,
+    #efefef 11px
+  );
   padding: 0;
   margin: 0;
   font-family: sans-serif;
-  color: fuchsia;
+  color: rgba($purple, $color-offset);
   * {
     box-sizing: border-box;
   }
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  line-height: 1;
+}
+
+p {
+  margin: 0;
+}
+
+.breakY {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 main {
@@ -51,15 +77,18 @@ button {
   justify-content: center;
 }
 
+$box-border-color: $purple;
+
 .box {
   width: 100%;
   min-width: 40%;
   max-width: 600px;
+  height: 100%;
+  max-height: 600px;
   background: #fff;
   padding: 2.3rem;
-  border: 1.3rem solid #efefef;
-  border-left-color: #e0dede;
-  // border-bottom-color: #e0dede;
-  border-bottom-color: #d6d4d4;
+  border: 1.3rem solid rgba($box-border-color, $color-offset);
+  border-left-color: $box-border-color;
+  border-bottom-color: $box-border-color;
   @include fontBig();
 }

@@ -40,13 +40,16 @@ function archive() {
 
 let loading = window.localStorage.getItem('gmail-reset-loading') !== null;
 function app() {
-  return {
+  let defaults = {
     loading: loading,
     showIntro: !loading,
     showFetch: false,
     showResults: false,
     count: -1,
     done: false,
+  };
+  return {
+    ...defaults,
     init() {
       if (this.loading) {
         this.fetch();
@@ -78,6 +81,11 @@ function app() {
       archive().then((resp) => {
         debugger;
       });
+    },
+    reset() {
+      for (let k in defaults) {
+        this[k] = defaults[k];
+      }
     },
   };
 }

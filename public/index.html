@@ -10,22 +10,33 @@
   <body>
     <main class="flex-left">
       <div class="box" x-data="app()" x-init="init()">
-        <div x-show="loading">loading...</div>
-        <div x-show="showIntro">
-          <h1>Intro</h1>
-          <p>This is some text</p>
-          <button @click="authorize">Login to Gmail</button>
+        <div x-show.transition.fade="loading">loading...</div>
+        <div x-show.transition.fade="showIntro">
+          <h1>Email Reset</h1>
+          <p>Archive (all the gmail) inbox</p>
+          <div class="breakY">
+            <button @click="authorize">Start</button>
+          </div>
         </div>
-        <div x-show="showFetch">
+        <div x-show.transition.fade="showFetch">
           <h2>Let's get that email</h2>
-          <button @click="fetch">Fetch Email</button>
+          <div class="breakY">
+            <button @click="fetch">Fetch Email</button>
+          </div>
         </div>
-        <div x-show="showResults">
+        <div x-show.transition.fade="showResults">
           <h2>Found <span x-text="count"></span> Results</h2>
-          <button @click="archive">Archive All</button>
+          <div class="breakY">
+            <button x-show.transition.fade="count > 0" @click="archive">
+              Archive All
+            </button>
+            <button x-show.transition.fade="count === 0" @click="reset">
+              Start Over
+            </button>
+          </div>
         </div>
 
-        <div x-show="done">
+        <div x-show.transition.fade="done">
           <h2>Done!</h2>
         </div>
       </div>
