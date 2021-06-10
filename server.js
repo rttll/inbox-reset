@@ -84,7 +84,7 @@ const handler = function (req, res) {
 };
 
 const server = http.createServer(handler);
-const port = 8080;
+const port = process.env.PORT || 8080;
 console.log('listening on port ' + port);
 
 server.listen(port);
