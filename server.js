@@ -65,22 +65,7 @@ const handler = function (req, res) {
     return;
   }
 
-  // fn(res, query);
-
-  res.writeHeader(200, { 'Content-Type': 'text/html' });
-  res.write(`<!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-  </head>
-  <body>
-    hiiiii
-  </body>
-  </html>`);
-  res.end();
+  fn(res, query);
 };
 
 const server = http.createServer(handler);
