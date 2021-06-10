@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const routes = {
   '/': 'index',
+  '/index.html': 'index',
   '/messages': 'messages',
   '/404': 'not_found',
   '/authenticate': 'authenticate', // post
@@ -14,8 +15,8 @@ const routes = {
 
 const controller = {
   assets: (res, pathname) => {
-    let asset = getFile(`./public/assets${pathname}`);
-    let type = pathname.split('.').pop();
+    let type = pathname.split('.').slice(-1)[0];
+    let asset = getFile(`./public/assets/${type}${pathname}`);
     render(res, { [type]: asset });
   },
   index: async (res, query) => {
@@ -46,11 +47,15 @@ const controller = {
 const handler = function (req, res) {
   const { pathname, query } = url.parse(req.url);
 
-  let assets = /\.js$/.test(pathname);
+  let assets = /\.js$|\.css$/.test(pathname);
   if (assets) {
     return controller.assets(res, pathname);
   }
   let fn = controller[routes[pathname]];
+  if (typeof fn !== 'function') {
+    console.log(' no method', pathname);
+    return;
+  }
   fn(res, query);
 };
 

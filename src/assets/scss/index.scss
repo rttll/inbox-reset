@@ -1,0 +1,56 @@
+body,
+html {
+  background: midnightblue;
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+  color: fuchsia;
+  * {
+    box-sizing: border-box;
+  }
+}
+
+main {
+  height: 100vh;
+}
+
+@mixin fontBig {
+  font-size: 2rem;
+}
+
+button {
+  background: gold;
+  padding: 1rem 2.3rem;
+  border: 1px solid goldenrod;
+  box-shadow: 3px 3px 0px #222;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  @include fontBig();
+  &:hover {
+    box-shadow: 1px 1px 0px #222;
+  }
+}
+
+.border-right {
+  border-right: 1px solid #333;
+}
+
+.v-half {
+  width: 50%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box {
+  background: #fff;
+  padding: 2.3rem;
+  border: 1.3rem solid #efefef;
+  @include fontBig();
+}

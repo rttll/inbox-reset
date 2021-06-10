@@ -24,6 +24,14 @@ const render = (res, data) => {
         return;
       }
       break;
+    case 'css':
+      type = 'text/css';
+      if (!content) {
+        res.writeHead(400);
+        res.end();
+        return;
+      }
+      break;
     default:
       // html
       type = 'text/html';

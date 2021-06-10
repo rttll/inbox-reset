@@ -4,16 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "serve": "node server.js"
+    "serve": "node server.js",
+    "sass": "sass --watch src/assets/scss:public/assets/css"
   },
   "dependencies": {
-    "googleapis": "39",
-    "open": "^8.2.0",
-    "server-destroy": "^1.0.1"
+    "googleapis": "39"
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "mime-types": "^2.1.31",
-    "nodemon": "^2.0.7"
+    "mime-types": "^2.1.31"
   }
 }
