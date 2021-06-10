@@ -22,6 +22,7 @@ const { google } = require('googleapis');
 // require('dotenv').config();
 
 const scopes = ['https://www.googleapis.com/auth/gmail.modify'];
+const PRODUCTION = process.env.NODE_ENV === 'production';
 
 const keys = {
   client_id: process.env.CLIENT_ID,
@@ -29,14 +30,14 @@ const keys = {
   redirect_uri: process.env.REDIRECT_URI,
 };
 
-const host = (process.env.NODE_ENV = 'development'
-  ? 'http://localhost:8080'
-  : '');
+const host = PRODUCTION
+  ? 'https://gmailreset.herokuapp.com'
+  : 'http://localhost:8080';
 
 let oauth2Client;
 
 function _getParam(str, key) {
-  const qs = new url.URL(`/?${str}`, 'http://localhost:8080').searchParams;
+  const qs = new url.URL(`/?${str}`, host).searchParams;
   return qs.get(key);
 }
 
