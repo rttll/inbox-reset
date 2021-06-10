@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "heroku local",
     "serve": "node server.js",
-    "sass": "sass --watch src/assets/scss:public/assets/css"
+    "sass": "sass --watch src/assets/scss/index.scss:public/assets/css/index.css",
+    "heroku-prebuild": "sass src/assets/scss/index.scss public/assets/css/index.css"
   },
   "dependencies": {
     "googleapis": "^76.0.0"
