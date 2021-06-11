@@ -5,8 +5,6 @@ const url = require('url');
 const api = require('./src/api');
 const { getFile, render } = require('./src/util');
 
-// require('dotenv').config();
-
 const routes = {
   '/': 'index',
   '/index.html': 'index',
@@ -61,6 +59,7 @@ const handler = function (req, res) {
     render(res, { [ext]: null });
     return;
   }
+
   fn(res, query);
 };
 

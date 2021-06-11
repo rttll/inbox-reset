@@ -10,22 +10,43 @@ const getFile = (file) => {
   });
 };
 
-const _types = {
+const types = {
   json: 'application/json',
   html: 'text/html',
   js: 'application/javascript',
   css: 'text/css',
 };
 
+const templates = {
+  breadcrumbs: `
+    <div class="breakY" style="font-size: 1rem">
+      <p>1. 🔑 Login</p>
+      <p>2. 🔎 Check Inbox</p>
+      <p>3. 🚀 Archive</p>
+    </div>
+  `,
+};
+
+function _processTemplates(buffer) {
+  let str = buffer.toString();
+  for (let k in templates) {
+    let regx = new RegExp(`{${k}}`, 'g');
+    str = str.replace(regx, templates[k]);
+  }
+  return str;
+}
+
 const render = (res, data) => {
   let key = Object.keys(data)[0];
 
-  if (Object.keys(_types).indexOf(key) === -1) key = 'html';
+  if (Object.keys(types).indexOf(key) === -1) key = 'html';
 
-  let mimeType = _types[key],
+  let mimeType = types[key],
     content = data[key];
 
-  if (!content) {
+  if (content) {
+    content = _processTemplates(content);
+  } else {
     if (key !== 'html') {
       res.writeHead(404);
       res.end();

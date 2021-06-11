@@ -12,26 +12,36 @@
       <div class="box" x-data="app()" x-init="init()">
         <div x-show.transition.fade="loading">loading...</div>
         <div x-show.transition.fade="showIntro">
-          <h1>Email Reset</h1>
-          <p>Archive (all the gmail) inbox</p>
+          <h1>Inbox Reset</h1>
+          <p>Archive all the (gmail) inbox</p>
+
+          {breadcrumbs}
+
           <div class="breakY">
-            <button @click="authorize">Start</button>
+            <button @click="authorize">🔑 Start</button>
           </div>
         </div>
         <div x-show.transition.fade="showFetch">
-          <h2>Let's get that email</h2>
+          <h2>Check Inbox</h2>
+
+          {breadcrumbs}
+
           <div class="breakY">
-            <button @click="fetch">Fetch Email</button>
+            <button @click="fetch">🔎 Fetch Email</button>
           </div>
         </div>
         <div x-show.transition.fade="showResults">
-          <h2>Found <span x-text="count"></span> Results</h2>
+          <h2>Archive</h2>
+
+          {breadcrumbs}
+
+          <p>Found <span x-text="count"></span> emails</p>
           <div class="breakY">
             <button x-show.transition.fade="count > 0" @click="archive">
-              Archive All
+              🚀 Archive All
             </button>
             <button x-show.transition.fade="count === 0" @click="reset">
-              Start Over
+              🔄 Start Over
             </button>
           </div>
         </div>
@@ -41,10 +51,8 @@
         </div>
       </div>
     </main>
-    <script
-      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
-      defer
-    ></script>
+    <script src="/assets/js/alpine.2.8.2.min.js" defer></script>
+
     <script src="/assets/js/index.js" type="application/javascript"></script>
   </body>
 </html>
