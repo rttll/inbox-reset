@@ -15,8 +15,15 @@ const routes = {
 
 const controller = {
   assets: (res, pathname) => {
-    let type = pathname.split('.').slice(-1)[0];
-    let path = `./public/${pathname}`.replace(/\/\//, '/');
+    let type = pathname.split('.').slice(-1)[0],
+      path;
+
+    if (/favicon\.png/.test(pathname)) {
+      path = `.${pathname}`;
+    } else {
+      path = `./public/${pathname}`.replace(/\/\//, '/');
+    }
+
     let asset = getFile(path);
     render(res, { [type]: asset });
   },
@@ -48,7 +55,7 @@ const controller = {
 const handler = function (req, res) {
   const { pathname, query } = url.parse(req.url);
 
-  let assets = /\.js$|\.css$/.test(pathname);
+  let assets = /\.js$|\.css$|\.png$/.test(pathname);
   if (assets) {
     return controller.assets(res, pathname);
   }
