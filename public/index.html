@@ -11,12 +11,11 @@
   <body>
     <main class="flex-left">
       <div class="box" x-data="app()" x-init="init()">
-        <div x-show.transition.fade="loading">loading...</div>
         <div x-show.transition.fade="showIntro">
           <h1>Inbox Reset</h1>
           <p>Archive all the (gmail) inbox</p>
 
-          {breadcrumbs}
+          {{steps}}
 
           <div class="breakY">
             <button @click="authorize">🔑 Start</button>
@@ -25,7 +24,7 @@
         <div x-show.transition.fade="showFetch">
           <h2>Check Inbox</h2>
 
-          {breadcrumbs}
+          {{steps}}
 
           <div class="breakY">
             <button @click="fetch">🔎 Fetch Email</button>
@@ -34,7 +33,7 @@
         <div x-show.transition.fade="showResults">
           <h2>Archive</h2>
 
-          {breadcrumbs}
+          {{steps}}
 
           <p>Found <span x-text="count"></span> emails</p>
           <div class="breakY">
@@ -50,6 +49,7 @@
         <div x-show.transition.fade="done">
           <h2>Done!</h2>
         </div>
+        <div x-show.transition.fade="loading">loading...</div>
       </div>
     </main>
     <script src="/assets/js/alpine.2.8.2.min.js" defer></script>

@@ -17,21 +17,17 @@ const types = {
   css: 'text/css',
 };
 
-const templates = {
-  breadcrumbs: `
-    <div class="breakY" style="font-size: 1rem">
-      <p>1. 🔑 Login</p>
-      <p>2. 🔎 Check Inbox</p>
-      <p>3. 🚀 Archive</p>
-    </div>
-  `,
-};
-
 function _processTemplates(buffer) {
-  let str = buffer.toString();
-  for (let k in templates) {
-    let regx = new RegExp(`{${k}}`, 'g');
-    str = str.replace(regx, templates[k]);
+  let str = buffer.toString(),
+    tags = str.match(/{{(.*?)}}/g);
+
+  if (!tags) return str;
+
+  for (let tag of tags) {
+    let fileName = tag.replace(/{{|}}/g, ''),
+      html = getFile(`public/templates/_${fileName}.html`),
+      regx = new RegExp(`${tag}`, 'g');
+    str = str.replace(regx, html);
   }
   return str;
 }
@@ -45,7 +41,7 @@ const render = (res, data) => {
     content = data[key];
 
   if (content) {
-    content = _processTemplates(content);
+    if (key === 'html') content = _processTemplates(content);
   } else {
     if (key !== 'html') {
       res.writeHead(404);

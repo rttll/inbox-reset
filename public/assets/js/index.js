@@ -78,8 +78,9 @@ function app() {
       });
     },
     archive() {
+      this.loading = true;
       archive().then((resp) => {
-        debugger;
+        this.loading = false;
       });
     },
     reset() {
