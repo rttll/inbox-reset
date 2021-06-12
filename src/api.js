@@ -31,7 +31,7 @@ const keys = {
 };
 const port = process.env.PORT || 8080;
 const host = PRODUCTION
-  ? 'https://gmailreset.herokuapp.com'
+  ? 'https://inboxreset.herokuapp.com'
   : `http://localhost:${port}`;
 
 let oauth2Client;

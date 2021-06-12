@@ -55,6 +55,15 @@ const controller = {
 const handler = function (req, res) {
   const { pathname, query } = url.parse(req.url);
 
+  if (/acme-challenge/.test(req.url)) {
+    res.writeHeader(200, { 'Content-Type': 'text/html' });
+    res.write(
+      'hxiP5EA1R-A7sQzZ42UYp33fMif-AhNtSgX8jdjNQKg.Cw29Ra92SnlCcSqWsy7C9snNDMf_9IEutdGaOxlO23k'
+    );
+    res.end();
+    return;
+  }
+
   let assets = /\.js$|\.css$|\.png$/.test(pathname);
   if (assets) {
     return controller.assets(res, pathname);
