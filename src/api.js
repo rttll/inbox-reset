@@ -110,11 +110,11 @@ function _getMessages() {
 
 async function messages() {
   let data = await _getMessages();
-  if (data) {
-    fs.writeFile('backup.json', JSON.stringify(data), () => {
-      console.log('wrote backup.json');
-    });
-  }
+  // if (data) {
+  //   fs.writeFile('backup.json', JSON.stringify(data), () => {
+  //     console.log('wrote backup.json');
+  //   });
+  // }
   return { count: results.length };
 }
 

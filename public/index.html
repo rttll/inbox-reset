@@ -11,7 +11,7 @@
   <body>
     <main class="flex-left">
       <div class="box" x-data="app()" x-init="init()">
-        <div x-show.transition.fade="showIntro">
+        <div x-show.transition.fade="showIntro" style="display: none;">
           <h1>Inbox Reset</h1>
           <p>Archive all the (gmail) inbox</p>
 
@@ -21,7 +21,7 @@
             <button @click="authorize">🔑 Start</button>
           </div>
         </div>
-        <div x-show.transition.fade="showFetch">
+        <div x-show.transition.fade="showFetch" style="display: none;">
           <h2>Check Inbox</h2>
 
           {{steps}}
@@ -30,26 +30,26 @@
             <button @click="fetch">🔎 Fetch Email</button>
           </div>
         </div>
-        <div x-show.transition.fade="showResults">
+        <div x-show.transition.fade="showResults" style="display: none;">
           <h2>Archive</h2>
 
           {{steps}}
 
           <p>Found <span x-text="count"></span> emails</p>
           <div class="breakY">
-            <button x-show.transition.fade="count > 0" @click="archive">
+            <button x-show.transition.fade="count > 0" @click="archive" style="display: none;">
               🚀 Archive All
             </button>
-            <button x-show.transition.fade="count === 0" @click="reset">
+            <button x-show.transition.fade="count === 0" @click="reset" style="display: none;">
               🔄 Start Over
             </button>
           </div>
         </div>
 
-        <div x-show.transition.fade="done">
+        <div x-show.transition.fade="done" style="display: none;">
           <h2>Done!</h2>
         </div>
-        <div x-show.transition.fade="loading">loading...</div>
+        <div x-show.transition.fade="loading">loading...</div style="display: none;">
       </div>
       {{footer}}
     </main>
