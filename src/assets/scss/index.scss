@@ -1,5 +1,10 @@
 $purple: #220140;
+$box-border-color: $purple;
 $color-offset: 0.8;
+
+@mixin fontBig {
+  font-size: 2rem;
+}
 
 body,
 html {
@@ -32,21 +37,12 @@ p {
   margin: 0;
 }
 
-.breakY {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
 main {
   height: 100vh;
   padding: 3rem;
   @media screen and (min-width: 900px) {
     padding-left: 10rem;
   }
-}
-
-@mixin fontBig {
-  font-size: 2rem;
 }
 
 button {
@@ -69,6 +65,15 @@ button {
   }
 }
 
+.text-small {
+  font-size: 12px;
+}
+
+.breakY {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .border-right {
   border-right: 1px solid #333;
 }
@@ -85,8 +90,6 @@ button {
   align-items: center;
   justify-content: center;
 }
-
-$box-border-color: $purple;
 
 .box {
   width: 100%;
