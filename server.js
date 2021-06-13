@@ -21,7 +21,7 @@ const controller = {
     if (/favicon\.png/.test(pathname)) {
       path = `.${pathname}`;
     } else {
-      path = `./public/${pathname}`.replace(/\/\//, '/');
+      path = `./public/${pathname}`;
     }
 
     let asset = getFile(path);
@@ -64,19 +64,26 @@ const handler = function (req, res) {
     return;
   }
 
-  let assets = /\.js$|\.css$|\.png$/.test(pathname);
+  const assets = /\.js$|\.css$|\.png$/.test(pathname);
   if (assets) {
     return controller.assets(res, pathname);
   }
-  let fn = controller[routes[pathname]];
 
-  if (typeof fn !== 'function') {
-    let ext = pathname.split('.').slice(-1)[0];
-    render(res, { [ext]: null });
+  const route = routes[pathname];
+  let method = controller[route];
+
+  // html catch-all and 404
+  if (typeof method !== 'function') {
+    let ext = pathname.split('.').slice(-1)[0],
+      data = null;
+    if (ext === 'html') {
+      data = getFile(`./public/${pathname}`);
+    }
+    render(res, { [ext]: data });
     return;
   }
 
-  fn(res, query);
+  method(res, query);
 };
 
 const server = http.createServer(handler);

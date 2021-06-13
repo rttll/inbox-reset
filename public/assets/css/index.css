@@ -65,6 +65,15 @@ button {
   border: 1.3rem solid rgba(34, 1, 64, 0.8);
   border-left-color: #220140;
   border-bottom-color: #220140;
+  overflow-y: auto;
   font-size: 2rem; }
+  .box.full {
+    max-width: 1000px; }
+
+#site-footer {
+  padding: 1rem;
+  position: absolute;
+  right: 0;
+  bottom: 0; }
 
 /*# sourceMappingURL=index.css.map */

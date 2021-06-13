@@ -90,5 +90,16 @@ $box-border-color: $purple;
   border: 1.3rem solid rgba($box-border-color, $color-offset);
   border-left-color: $box-border-color;
   border-bottom-color: $box-border-color;
+  overflow-y: auto;
   @include fontBig();
+  &.full {
+    max-width: 1000px;
+  }
+}
+
+#site-footer {
+  padding: 1rem;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
