@@ -1,21 +1,18 @@
 {
-  "name": "node",
+  "name": "inbox-reset",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
+  "author": "Adrian Cousens <a@thisadrian.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "heroku local",
-    "serve": "node server.js",
+    "serve": "heroku local",
     "sass": "sass --watch src/assets/scss/index.scss:public/assets/css/index.css",
     "sass:build": "node src/lib/sass.js"
   },
   "dependencies": {
     "googleapis": "^76.0.0"
   },
-  "devDependencies": {
-    "dotenv": "^10.0.0",
-    "mime-types": "^2.1.31"
-  },
+  "devDependencies": {},
   "engines": {
     "node": "12.22.x"
   }
